@@ -5,57 +5,141 @@ using TMPro;
 
 public class MainLoop : MonoBehaviour
 {
-    public GameObject upX;
-    public GameObject upY;
-    public GameObject downX;
-    public GameObject downY;
+    public GameObject arrowX;
+    public GameObject arrowY;
+    public GameObject trialX;
+    public GameObject trialY;
+    public GameObject restX;
+    public GameObject restY;
+
+    public GameObject textX;
+    public GameObject textY;
+    public GameObject nameX;
+    public GameObject nameY;
     public string subscriber;
+    public int totalTrials;
 
     private GameObject traj;
     private bool upFlag;
     private bool downFlag;
     private bool zeroFlag;
+    private bool restFlag;
+
+    private int stage;
+    private int rep;
+    private int max_rep;
+    private bool passRest;
+
+    private Vector3 arrowPositionUp;
+    private Vector3 trialPositionUp;
+    private Vector3 arrowPositionDown;
+    private Vector3 trialPositionDown;
+    private float angleUp = 0f;
+    private float angleDown = 180f;
 
     void Start()
     {
+        rep = 0;
+        stage = 0;
+        max_rep = (int) (totalTrials*2); // default is 3 trials for each direction
+
+        arrowPositionUp = new Vector3(-8f,3.3f,0f);
+        arrowPositionDown = new Vector3(-8f,0.7f,0f);
+        trialPositionUp = new Vector3(-10.2f,7.46f,0f);
+        trialPositionDown = new Vector3(-10.2f,7.43f,0f);
+
+        textX.GetComponent<TextMeshProUGUI>().text = "0";
+        textY.GetComponent<TextMeshProUGUI>().text = "0";
+
         // Initialize pre-trial cloud
-        upX.SetActive(false);
-        upY.SetActive(false);
-        downX.SetActive(false);
-        downY.SetActive(false);
+        arrowX.SetActive(false);
+        arrowY.SetActive(false);
+        trialX.SetActive(false);
+        trialY.SetActive(false);
+        restX.SetActive(false);
+        restY.SetActive(false);
 
         zeroFlag = true;
         upFlag = false;
         downFlag = false;
+        restFlag = false;
 
         traj = GameObject.Find(subscriber);
     }
 
     void Update()
     {
-        if (traj.GetComponent<JointStateSubscriber>().pos > 0 & !downFlag)
+        if (traj.GetComponent<JointStateSubscriber>().pos > 100 & !restFlag) {
+            restX.SetActive(true);
+            restY.SetActive(true);
+            restFlag = true;
+            zeroFlag = false;
+        }
+        else if (traj.GetComponent<JointStateSubscriber>().pos > 0 & traj.GetComponent<JointStateSubscriber>().pos < 100 & !downFlag)
         {
-            downX.SetActive(true);
-            downY.SetActive(true);
+            rep = rep + 1;
+            arrowX.SetActive(true);
+            arrowY.SetActive(true);
+            arrowX.GetComponent<Transform>().localPosition = arrowPositionDown;
+            arrowX.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0f,0f,angleDown));
+            arrowY.GetComponent<Transform>().localPosition = arrowPositionDown;
+            arrowY.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0f,0f,angleDown));
             downFlag = true;
             zeroFlag = false;
         }
         else if (traj.GetComponent<JointStateSubscriber>().pos < 0 & !upFlag)
         {
-            upX.SetActive(true);
-            upY.SetActive(true);
+            rep = rep + 1;
+            arrowX.SetActive(true);
+            arrowY.SetActive(true);
+            arrowX.GetComponent<Transform>().localPosition = arrowPositionUp;
+            arrowX.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0f,0f,angleUp));
+            arrowY.GetComponent<Transform>().localPosition = arrowPositionUp;
+            arrowY.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0f,0f,angleUp));
             upFlag = true;
             zeroFlag = false;
         }
         else if (traj.GetComponent<JointStateSubscriber>().pos == 0 & !zeroFlag)
         {
-            upX.SetActive(false);
-            upY.SetActive(false);
-            downX.SetActive(false);
-            downY.SetActive(false);
+            arrowX.SetActive(false);
+            arrowY.SetActive(false);
+            restX.SetActive(false);
+            restY.SetActive(false);
             upFlag = false;
             downFlag = false;
             zeroFlag = true;
+            if (restFlag) {
+                if (rep < max_rep) {
+                    if (rep%2 == 0) {
+                        stage = stage + 1;
+                        if (stage == 1) {
+                            trialX.SetActive(true);
+                            trialY.SetActive(true);
+                        }
+                        trialX.GetComponent<Transform>().localPosition = trialPositionUp;
+                        trialX.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0f,0f,angleUp));
+                        trialY.GetComponent<Transform>().localPosition = trialPositionUp;
+                        trialY.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0f,0f,angleUp));
+                    }
+                    else {
+                        trialX.GetComponent<Transform>().localPosition = trialPositionDown;
+                        trialX.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0f,0f,angleDown));
+                        trialY.GetComponent<Transform>().localPosition = trialPositionDown;
+                        trialY.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0f,0f,angleDown));
+                    }
+                    textX.GetComponent<TextMeshProUGUI>().text = stage.ToString();
+                    textY.GetComponent<TextMeshProUGUI>().text = stage.ToString();
+                }
+                else {
+                    trialX.SetActive(false);
+                    trialY.SetActive(false);
+                    textX.GetComponent<TextMeshProUGUI>().color = new Color (0.67f,0.67f,0.67f, 1.0f);
+                    textY.GetComponent<TextMeshProUGUI>().color = new Color (0.67f,0.67f,0.67f, 1.0f);
+                    nameX.GetComponent<TextMeshProUGUI>().color = new Color (0.67f,0.67f,0.67f, 1.0f);
+                    nameY.GetComponent<TextMeshProUGUI>().color = new Color (0.67f,0.67f,0.67f, 1.0f);
+                }
+            }
+
         }
     }
 }

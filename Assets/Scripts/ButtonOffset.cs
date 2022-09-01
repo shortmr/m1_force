@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ButtonOffset : MonoBehaviour
 {
-    public GameObject robotState;
+    public GameObject actualX;
+    public GameObject actualY;
 
     // Start is called before the first frame update
     void Start()
@@ -14,6 +15,7 @@ public class ButtonOffset : MonoBehaviour
 
     public void Offset()
     {
-        robotState.GetComponent<ActualEffort>().positionOffset = robotState.GetComponent<ActualEffort>().positionEffort;
+        actualX.GetComponent<ActualEffort>().positionOffset = actualX.GetComponent<ActualEffort>().positionEffort;
+        actualY.GetComponent<ActualEffort>().positionOffset = actualY.GetComponent<ActualEffort>().positionEffort;
     }
 }
