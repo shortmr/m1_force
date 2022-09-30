@@ -4,22 +4,25 @@ using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
 using JointState = RosMessageTypes.Sensor.JointStateMsg;
 
-public class EffortSubscriber : MonoBehaviour
+public class JointSubscriber : MonoBehaviour
 {
+    public string topic;
+    public float tau_s;
+    public float q;
+
     private bool startup = true;
-    public string data;
-    public float pos;
 
     void Start() {
         Application.targetFrameRate = 50;
         if (startup) {
-            ROSConnection.GetOrCreateInstance().Subscribe<JointState>("/" + data + "/", StreamData);
+            ROSConnection.GetOrCreateInstance().Subscribe<JointState>("/" + topic + "/", StreamData);
             startup = false;
         }
     }
 
     void StreamData(JointState d) {
-        pos = (float)d.effort[0];
+        tau_s = (float)d.effort[0]; // interaction torque
+        q = (float)d.position[0]; // M1 angle
     }
 
     private void Update()

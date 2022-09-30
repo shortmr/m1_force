@@ -14,12 +14,10 @@ public class MainLoop : MonoBehaviour
 
     public GameObject textX;
     public GameObject textY;
-    public GameObject nameX;
-    public GameObject nameY;
     public string subscriber;
     public int totalTrials;
 
-    private GameObject traj;
+    private GameObject data;
     private bool upFlag;
     private bool downFlag;
     private bool zeroFlag;
@@ -64,18 +62,18 @@ public class MainLoop : MonoBehaviour
         downFlag = false;
         restFlag = false;
 
-        traj = GameObject.Find(subscriber);
+        data = GameObject.Find(subscriber);
     }
 
     void Update()
     {
-        if (traj.GetComponent<JointStateSubscriber>().pos > 100 & !restFlag) {
+        if (data.GetComponent<JointSubscriber>().q > 100 & !restFlag) {
             restX.SetActive(true);
             restY.SetActive(true);
             restFlag = true;
             zeroFlag = false;
         }
-        else if (traj.GetComponent<JointStateSubscriber>().pos > 0 & traj.GetComponent<JointStateSubscriber>().pos < 100 & !downFlag)
+        else if (data.GetComponent<JointSubscriber>().q > 0 & data.GetComponent<JointSubscriber>().q < 100 & !downFlag)
         {
             rep = rep + 1;
             arrowX.SetActive(true);
@@ -87,7 +85,7 @@ public class MainLoop : MonoBehaviour
             downFlag = true;
             zeroFlag = false;
         }
-        else if (traj.GetComponent<JointStateSubscriber>().pos < 0 & !upFlag)
+        else if (data.GetComponent<JointSubscriber>().q < 0 & !upFlag)
         {
             rep = rep + 1;
             arrowX.SetActive(true);
@@ -99,7 +97,7 @@ public class MainLoop : MonoBehaviour
             upFlag = true;
             zeroFlag = false;
         }
-        else if (traj.GetComponent<JointStateSubscriber>().pos == 0 & !zeroFlag)
+        else if (data.GetComponent<JointSubscriber>().q == 0 & !zeroFlag)
         {
             arrowX.SetActive(false);
             arrowY.SetActive(false);
@@ -133,10 +131,6 @@ public class MainLoop : MonoBehaviour
                 else {
                     trialX.SetActive(false);
                     trialY.SetActive(false);
-                    textX.GetComponent<TextMeshProUGUI>().color = new Color (0.67f,0.67f,0.67f, 1.0f);
-                    textY.GetComponent<TextMeshProUGUI>().color = new Color (0.67f,0.67f,0.67f, 1.0f);
-                    nameX.GetComponent<TextMeshProUGUI>().color = new Color (0.67f,0.67f,0.67f, 1.0f);
-                    nameY.GetComponent<TextMeshProUGUI>().color = new Color (0.67f,0.67f,0.67f, 1.0f);
                 }
             }
 
