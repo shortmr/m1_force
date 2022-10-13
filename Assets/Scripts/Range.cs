@@ -26,7 +26,7 @@ public class Range : MonoBehaviour
 
         // Set neutral position
         targetAngle = Quaternion.Euler(0, 0, originRange) * Quaternion.identity;
-        neutral.transform.rotation = Quaternion.Slerp(neutral.transform.rotation, targetAngle, Time.deltaTime * 100);
+        neutral.transform.localRotation = Quaternion.Slerp(neutral.transform.rotation, targetAngle, Time.deltaTime * 100);
 
         // Draw angle range
         line = gameObject.GetComponent<LineRenderer>();

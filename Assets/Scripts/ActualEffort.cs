@@ -18,7 +18,6 @@ public class ActualEffort : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 50;
-        gain = 0.2f;
         data = jointState;
     }
 

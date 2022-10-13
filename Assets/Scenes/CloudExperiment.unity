@@ -1973,7 +1973,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jointState: {fileID: 555978165}
-  gain: 0.2
+  gain: 0.1
   positionEffort: 0
   positionOffset: 0
 --- !u!1 &740310148
@@ -4400,7 +4400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jointCommand: {fileID: 341768042}
-  gain: 0.25
+  gain: 0.1
   positionEffort: 0
 --- !u!1001 &1916218228
 PrefabInstance:
@@ -5127,7 +5127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jointState: {fileID: 1792140566}
-  gain: 0.2
+  gain: 0.1
   positionEffort: 0
   positionOffset: 0
 --- !u!1 &2038258801

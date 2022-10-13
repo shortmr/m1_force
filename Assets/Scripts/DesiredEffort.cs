@@ -14,7 +14,6 @@ public class DesiredEffort : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 50;
-        gain = 0.2f;
         data = jointCommand;
     }
 
